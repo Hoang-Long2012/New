@@ -67,10 +67,10 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False)
 			if Parent:
 				os.makedirs(Parent, exist_ok=True)
 			if Byte:
-				with open(File, Mode):
+				with open(File, Mode, buffering=0):
 					pass
 			else:
-				with open(File, Mode, encoding=Encoding if Encoding else "utf-8"):
+				with open(File, Mode, encoding=Encoding if Encoding else "utf-8",):
 					pass
 			if Exists:
 				log(f"Overwritten {File}", InfoLevel.verbose)
