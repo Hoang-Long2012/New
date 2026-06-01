@@ -1,0 +1,10 @@
+# Byte-compiled / cache
+/src/__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.spec
+*.bat
