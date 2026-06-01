@@ -22,7 +22,7 @@ If you are using Windows you can download New_Windows_x64.zip in the releases se
 ### From source
 
 ```
-git clone https://github.com/yourusername/new.git
+git clone https://github.com/Hoang-Long2012/new.git
 cd new/src
 python new.py
 ```
@@ -122,6 +122,7 @@ new Project -q
 
 | Option              | Description                             |
 | ------------------- | --------------------------------------- |
+| `-d`, `--directory`      | Folders to create                         |
 | `-f`, `--file`      | Files to create                         |
 | `-b`, `--byte`      | Create files in binary mode             |
 | `-e`, `--encoding`  | Encoding for text files                 |
@@ -153,6 +154,11 @@ new -f project/src/main.py
 ```
 
 The `project` and `project/src` directories will be created automatically if they do not already exist.
+
+## Changes
+
+You can read CHANGELOG.md to know changes at:
+[Here](https://github.com/Hoang-Long2012/new/blob/main/CHANGELOG.md)
 
 ## License
 
