@@ -3,12 +3,12 @@ import fs
 import sys
 import argparse
 def getVersion():
-	return "1.1"
+	return "1.2"
 def parseArgs():
 	Parser = argparse.ArgumentParser(prog="new", description="Simple folder and file creation utility.")
-	Parser.add_argument("folder", nargs="*", type=str, metavar="FOLDERS", help="Folders to create.")
-	Parser.add_argument("-d", "--directory", nargs="*", type=str, metavar="FOLDERS", help="Folders to create.")
-	Parser.add_argument("-f", "--file", nargs="*", type=str, metavar="FILES", help="Files to create.")
+	Parser.add_argument("folder", nargs="+", type=str, metavar="FOLDERS", help="Folders to create.")
+	Parser.add_argument("-d", "--directory", nargs="+", type=str, metavar="FOLDERS", help="Folders to create.")
+	Parser.add_argument("-f", "--file", nargs="+", type=str, metavar="FILES", help="Files to create.")
 	Parser.add_argument("-b", "--byte", action="store_true", help="Create files in binary mode.")
 	Parser.add_argument("-e", "--encoding", type=str, metavar="ENCODING", help="Encoding for created files.")
 	Parser.add_argument("-o", "--overwrite", action="store_true", help="If created file exists then overwrite it.")
@@ -32,8 +32,16 @@ def main():
 		Unknown_STR = ", ".join(Unknown)
 		log(f"Unknown arguments: {Unknown_STR}", InfoLevel.quiet, sys.stderr)
 		sys.exit(2)
-	if Args.folder or Args.directory:
-		fs.createFolder(Args.folder or Args.directory, Args.overwrite, Args.yes)
+	if Args.yes and not Args.overwrite:
+		log("-y; --yes requires -o; --overwrite.", InfoLevel.quiet, sys.stderr)
+		sys.exit(2)
+	Folders = []
+	if Args.folder:
+		Folders.extend(Args.folder)
+	if Args.directory:
+		Folders.extend(Args.directory)
+	if Folders:
+		fs.createFolder(Folders, Args.overwrite, Args.yes)
 	if Args.file:
 		if Args.byte and Args.encoding:
 			log("Cannot use -e; --encoding with -b; --byte.", InfoLevel.quiet, sys.stderr)

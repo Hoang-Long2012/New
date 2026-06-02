@@ -41,7 +41,7 @@ def createFolder(Dirs, Overwrite=False, Sure=False):
 			log(f"Permission denied: {Dir}", InfoLevel.quiet, sys.stderr)
 			continue
 		except OSError as Error:
-			log(f"{Dir} directory name is invalid.\n{Error}", InfoLevel.quiet, sys.stderr)
+			log(f"Cannot create directory {Dir}.\n{Error}", InfoLevel.quiet, sys.stderr)
 			continue
 def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False):
 	if not isinstance(Files, list):
@@ -80,5 +80,5 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False)
 			log(f"Permission denied: {File}", InfoLevel.quiet, sys.stderr)
 			continue
 		except OSError as Error:
-			log(f"{File} file name is invalid.\n{Error}", InfoLevel.quiet, sys.stderr)
+			log(f"Cannot create file {File}.\n{Error}", InfoLevel.quiet, sys.stderr)
 			continue
