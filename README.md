@@ -41,6 +41,12 @@ pyinstaller --onefile new.py
 new Project Docs Assets
 ```
 
+Or:
+
+```
+new -d Project Docs Assets
+```
+
 Result:
 
 ```
@@ -106,6 +112,18 @@ new Project -f README.md -o
 new Project -f README.md -o -y
 ```
 
+### Create a new file and update access time and modified time of it
+
+```
+new -f main.py -a 1234.5678 -m 1234.5678
+```
+
+### Create a new folder and update access time and modified time of it
+
+```
+new src -a 1234.5678 -m 1234.5678
+```
+
 ### Verbose mode
 
 ```
@@ -128,6 +146,9 @@ new Project -q
 | `-e`, `--encoding`  | Encoding for text files                 |
 | `-o`, `--overwrite` | Overwrite existing files or directories |
 | `-y`, `--yes`       | Skip overwrite confirmation             |
+| `-a, `--access-time`     | Update the access time            |
+| `-m, `--modified-time`     | Update the modified time            |
+| `-c, `--no-change-timestamp`     | Not change timestamp if file existed            |
 | `-v`, `--verbose`   | Show detailed logs                      |
 | `-q`, `--quiet`     | Suppress non-critical output            |
 | `-V`, `--version`   | Show program version                    |
@@ -135,23 +156,25 @@ new Project -q
 
 ## Examples
 
-Create a Python project skeleton:
+### Create a Python project skeleton:
 
 ```
 new src tests docs -f README.md LICENSE src/main.py tests/test_main.py
 ```
 
-Create a web project skeleton:
+### Create a web project skeleton:
 
 ```
 new css js images -f index.html css/style.css js/app.js
 ```
 
-Create nested directories automatically:
+### Create nested directories automatically:
 
 ```
 new -f project/src/main.py
 ```
+
+### Note:
 
 The `project` and `project/src` directories will be created automatically if they do not already exist.
 
