@@ -7,6 +7,11 @@ def formatTime(Time_Str, Pattern):
 		return datetime.strptime(Time_Str, Pattern).timestamp()
 	except ValueError:
 		return None
+def expandFormats(Format):
+	yield Format
+	if Format.endswith("%M"):
+		yield Format + ":%S"
+		yield Format + ":%S.%f"
 def parseTime(Time_Str):
 	if Time_Str is None:
 		return None
@@ -29,18 +34,11 @@ def parseTime(Time_Str):
 		"%Y%m%d%H%M%S",
 	]
 	for Format in Formats:
-		Time = formatTime(Time_Str, Format)
-		if Time is None:
-			if Format.endswith("%M"):
-				Format = Format + ":%S"
-				Time = formatTime(Time_Str, Format)
-				if Time is None:
-					if Format.endswith(":%S"):
-						Format + ".%f"
-						Time = formatTime(Time_Str, Format)
-						if Time is None:
-							continue
-		return Time
+		for RealFormat in expandFormats(Format):
+			Time = formatTime(Time_Str, RealFormat)
+			if Time is None:
+				continue
+			return Time
 	raise ValueError(f"Invalid time format: {Time_Str}")
 def updateTime(Path, AccessTime=None, ModifiedTime=None):
 	Stat = os.stat(Path)
