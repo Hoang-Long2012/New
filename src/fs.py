@@ -2,6 +2,7 @@ from output import InfoLevel, log, question
 import os
 import shutil
 import sys
+import stime
 def shouldOverwrite(Overwrite, Sure, Path):
 	if not Overwrite:
 		Type = "Directory" if os.path.isdir(Path) else "File"
@@ -10,23 +11,6 @@ def shouldOverwrite(Overwrite, Sure, Path):
 	if Sure:
 		return True
 	return question(f"Are you sure you want to overwrite {Path}")
-def updateTime(Path, AccessTime=None, ModifiedTime=None):
-	Time = []
-	Stat = os.stat(Path)
-	if AccessTime is not None and isinstance(AccessTime, (int, float)):
-		Time.append(AccessTime)
-	else:
-		if AccessTime is not None:
-			log(f"Warning: Access time is invalid: {AccessTime}", InfoLevel.normal, sys.stderr)
-		Time.append(Stat.st_atime)
-	if ModifiedTime is not None and isinstance(ModifiedTime, (int, float)):
-		Time.append(ModifiedTime)
-	else:
-		if ModifiedTime is not None:
-			log(f"Warning: Modified time is invalid: {ModifiedTime}", InfoLevel.normal, sys.stderr)
-		Time.append(Stat.st_mtime)
-	os.utime(Path, tuple(Time))
-	log(f"Updated access time of {Path} to {Time[0]} and modified time of {Path} to {Time[1]}", InfoLevel.verbose)
 def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, AccessTime=None, ModifiedTime=None):
 	if not isinstance(Dirs, list):
 		log(f"{str(Dirs)} is invalid.", InfoLevel.quiet, sys.stderr)
@@ -42,7 +26,7 @@ def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, Access
 				continue
 			if not shouldOverwrite(Overwrite, Sure, Dir):
 				if ChangeTimestamp:
-					updateTime(Dir, AccessTime, ModifiedTime)
+					stime.updateTime(Dir, AccessTime, ModifiedTime)
 				continue
 			try:
 				shutil.rmtree(Dir)
@@ -57,7 +41,7 @@ def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, Access
 			os.makedirs(Dir, exist_ok=True)
 			log(f"Created {Dir}", InfoLevel.verbose)
 			if ChangeTimestamp:
-				updateTime(Dir, AccessTime, ModifiedTime)
+				stime.updateTime(Dir, AccessTime, ModifiedTime)
 		except PermissionError:
 			log(f"Permission denied: {Dir}", InfoLevel.quiet, sys.stderr)
 			continue
@@ -80,7 +64,7 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 				continue
 			if not shouldOverwrite(Overwrite, Sure, File):
 				if ChangeTimestamp:
-					updateTime(File, AccessTime, ModifiedTime)
+					stime.updateTime(File, AccessTime, ModifiedTime)
 				continue
 			Mode = "wb" if Byte else "w"
 		else:
@@ -100,7 +84,7 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 			else:
 				log(f"Created {File}", InfoLevel.verbose)
 			if ChangeTimestamp:
-				updateTime(File, AccessTime, ModifiedTime)
+				stime.updateTime(File, AccessTime, ModifiedTime)
 		except PermissionError:
 			log(f"Permission denied: {File}", InfoLevel.quiet, sys.stderr)
 			continue
