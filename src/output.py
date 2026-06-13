@@ -1,5 +1,8 @@
 from enum import IntEnum
 import sys
+import fileinput
+class __stdin__:
+	pass
 class InfoLevel(IntEnum):
 	verbose = 2
 	normal = 1
@@ -24,3 +27,14 @@ def question(MSG):
 		else:
 			print("Invalid choice.", file=sys.stderr)
 			continue
+def getInput(File_List=None):
+	Lines = []
+	LineNumber = 0
+	if File_List and isinstance(File_List, (str, list)):
+		for LineNumber, Line in enumerate(fileinput.input(File_List, encoding="utf-8"), start=1):
+			Lines.append(Line)
+		return (LineNumber, Lines)
+	else:
+		for LineNumber, Line in enumerate(sys.stdin, start=1):
+			Lines.append(Line)
+		return (LineNumber, Lines)

@@ -1,8 +1,23 @@
-from output import InfoLevel, log, question
+from output import InfoLevel, log, question, getInput, __stdin__
 import os
 import shutil
-import sys
 import stime
+import sys
+def safeInput(File_List=None):
+	try:
+		return getInput(File_List)
+	except FileNotFoundError as Error:
+		log(f"Template not found:\n{Error}", InfoLevel.quiet, sys.stderr)
+		return (None, None)
+	except PermissionError as Error:
+		log(f"Cannot access to template:\n{Error}", InfoLevel.quiet, sys.stderr)
+		return (None, None)
+	except OSError as Error:
+		log(f"Cannot read template:\n{Error}", InfoLevel.quiet, sys.stderr)
+		return (None, None)
+	except KeyboardInterrupt:
+		log("Canceled.", InfoLevel.verbose)
+		return (None, None)
 def shouldOverwrite(Overwrite, Sure, Path):
 	if not Overwrite:
 		Type = "Directory" if os.path.isdir(Path) else "File"
@@ -18,6 +33,9 @@ def resolveReference(Ref, Fallback):
 		return Ref
 	log(f"Warning: Reference {Ref} invalid, using {Fallback}", InfoLevel.normal, sys.stderr)
 	return Fallback
+def getTime(Ref, AccessTime, ModifiedTime):
+	Stat = os.stat(Ref)
+	return (AccessTime if AccessTime is not None else Stat.st_atime, ModifiedTime if ModifiedTime is not None else Stat.st_mtime)
 def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, AccessTime=None, ModifiedTime=None, Reference=None):
 	if not isinstance(Dirs, list):
 		log(f"{str(Dirs)} is invalid.", InfoLevel.quiet, sys.stderr)
@@ -34,7 +52,7 @@ def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, Access
 				continue
 			if not shouldOverwrite(Overwrite, Sure, Dir):
 				if ChangeTimestamp:
-					stime.updateTime(Dir, AccessTime if AccessTime else os.stat(Ref).st_atime, ModifiedTime if ModifiedTime else os.stat(Ref).st_mtime)
+					stime.updateTime(Dir, *getTime(Ref, AccessTime, ModifiedTime))
 				continue
 			try:
 				shutil.rmtree(Dir)
@@ -49,54 +67,78 @@ def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, Access
 			os.makedirs(Dir, exist_ok=True)
 			log(f"Created {Dir}", InfoLevel.verbose)
 			if ChangeTimestamp and os.path.exists(Ref):
-				stime.updateTime(Dir, AccessTime if AccessTime else os.stat(Ref).st_atime, ModifiedTime if ModifiedTime else os.stat(Ref).st_mtime)
+				stime.updateTime(Dir, *getTime(Ref, AccessTime, ModifiedTime))
 		except PermissionError:
 			log(f"Permission denied: {Dir}", InfoLevel.quiet, sys.stderr)
 			continue
 		except OSError as Error:
 			log(f"Cannot create directory {Dir}.\n{Error}", InfoLevel.quiet, sys.stderr)
 			continue
-def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False, ChangeTimestamp=True, AccessTime=None, ModifiedTime=None, Reference=None):
+def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False, ChangeTimestamp=True, AccessTime=None, ModifiedTime=None, Reference=None, Write=None, Template_List=None):
 	if not isinstance(Files, list):
 		log(f"{str(Files)} is invalid.", InfoLevel.quiet, sys.stderr)
 		return None
-	for File in Files:
-		if not isinstance(File, str):
-			log(f"{File} is invalid.", InfoLevel.quiet, sys.stderr)
+	for File_Path in Files:
+		if not isinstance(File_Path, str):
+			log(f"{File_Path} is invalid.", InfoLevel.quiet, sys.stderr)
 			continue
-		File = os.path.abspath(File)
-		Ref = resolveReference(Reference, File)
-		Exists = os.path.exists(File)
+		File_Path = os.path.abspath(File_Path)
+		Ref = resolveReference(Reference, File_Path)
+		Exists = os.path.exists(File_Path)
 		if Exists:
-			if not os.path.isfile(File):
-				log(f"{File} is a directory.", InfoLevel.quiet, sys.stderr)
+			if not os.path.isfile(File_Path):
+				log(f"{File_Path} is a directory.", InfoLevel.quiet, sys.stderr)
 				continue
-			if not shouldOverwrite(Overwrite, Sure, File):
+			if not shouldOverwrite(Overwrite, Sure, File_Path):
 				if ChangeTimestamp:
-					stime.updateTime(File, AccessTime if AccessTime else os.stat(Ref).st_atime, ModifiedTime if ModifiedTime else os.stat(Ref).st_mtime)
+					stime.updateTime(File_Path, *getTime(Ref, AccessTime, ModifiedTime))
 				continue
 			Mode = "wb" if Byte else "w"
 		else:
 			Mode = "xb" if Byte else "x"
 		try:
-			Parent = os.path.dirname(File)
+			Parent = os.path.dirname(File_Path)
 			if Parent:
 				os.makedirs(Parent, exist_ok=True)
 			if Byte:
-				with open(File, Mode, buffering=0):
+				with open(File_Path, Mode, buffering=0):
 					pass
 			else:
-				with open(File, Mode, encoding=Encoding if Encoding else "utf-8",):
-					pass
+				with open(File_Path, Mode, encoding=Encoding if Encoding else "utf-8") as File:
+					LineNumber = 0
+					Total_Characters = 0
+					if Template_List and isinstance(Template_List, list):
+						Count, Lines = safeInput(Template_List)
+						LineNumber += Count or 0
+						if Lines is not None:
+							File.writelines(Lines)
+							Total_Characters += len("".join(Lines))
+					if Write is __stdin__:
+						Count, Lines = safeInput()
+						LineNumber += Count or 0
+						if Lines is not None:
+							File.writelines(Lines)
+							Total_Characters += len("".join(Lines))
+					elif Write is not None:
+						Decoded = Write
+						try:
+							Decoded = Write.encode().decode("unicode_escape")
+							File.write(Decoded)
+						except (ValueError, UnicodeError, UnicodeDecodeError):
+							File.write(Write)
+						Written_Lines = Decoded.count("\n") + (1 if Decoded else 0)
+						LineNumber += Written_Lines
+						Total_Characters += len(Decoded)
+					log(f"Wrote {LineNumber} lines and {Total_Characters} Characters to {File_Path}", InfoLevel.verbose)
 			if Exists:
-				log(f"Overwritten {File}", InfoLevel.verbose)
+				log(f"Overwritten {File_Path}", InfoLevel.verbose)
 			else:
-				log(f"Created {File}", InfoLevel.verbose)
+				log(f"Created {File_Path}", InfoLevel.verbose)
 			if ChangeTimestamp and os.path.exists(Ref):
-				stime.updateTime(File, AccessTime if AccessTime else os.stat(Ref).st_atime, ModifiedTime if ModifiedTime else os.stat(Ref).st_mtime)
+				stime.updateTime(File_Path, *getTime(Ref, AccessTime, ModifiedTime))
 		except PermissionError:
-			log(f"Permission denied: {File}", InfoLevel.quiet, sys.stderr)
+			log(f"Permission denied: {File_Path}", InfoLevel.quiet, sys.stderr)
 			continue
 		except OSError as Error:
-			log(f"Cannot create file {File}.\n{Error}", InfoLevel.quiet, sys.stderr)
+			log(f"Cannot create file {File_Path}.\n{Error}", InfoLevel.quiet, sys.stderr)
 			continue
