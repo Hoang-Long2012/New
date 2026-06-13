@@ -137,7 +137,7 @@ new -f main.py -T template1.txt template2.txt
 
 ### Timestamp control
 
-Copy access time and modified time from THE reference FILE
+Copy access time and modified time from a reference FILE
 ```
 new -f file.txt -r reference.txt
 ```
@@ -299,8 +299,20 @@ World
 new -f tab.txt -w "Name\tValue"
 ```
 
+Produces:
+
+```
+Name    Value
+```
+
 ```
 new -f emoji.txt -w "\u2764"
+```
+
+Produces:
+
+```
+❤
 ```
 
 ```
@@ -312,7 +324,7 @@ new -f symbol.txt -w "\N{BLACK HEART SUIT}"
 ## Changelog
 
 See changelog from:
-[CHANGELOG.md](https://github.com/Hoang-Long2012/new/blob/main/CHANGELOG.md)
+[CHANGELOG.md](CHANGELOG.md)
 
 ---
 
