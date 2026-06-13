@@ -175,6 +175,7 @@ new -f project/src/main.py
 - Missing parent directories are created automatically.
 - When writing inline, you can use unicode escapes like \n, \t, etc to write some special characters like line breaks, tabs, etc. If the escape is not valid, New will write the original string to the file.
 - Options -w; --write and -t; --template is currently only applicable to text files.
+- When the program is waiting for input from stdin you can Press Ctrl+Z then Enter on Windows or Control+D on Linux, MacOS to finish, Ctrl+C to cancel.
 
 ---
 
