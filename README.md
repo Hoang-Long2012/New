@@ -216,7 +216,7 @@ Examples:
 - Template files are processed in the order specified.
 - When a template file is `-`, it is interpreted as stdin.
 - To pass a literal file named `-`, use `./-` (Linux/macOS) or `.\-` (Windows).
-- Options -w; --write and -t; --template is currently only applicable to text files.
+- Options -w; --write and -T; --template is currently only applicable to text files.
 - The source code is cross-platform and should work on Windows, Linux and macOS.
 - Currently only Windows binaries are officially provided.
 
@@ -241,7 +241,7 @@ When using `-w`, New attempts to decode common escape sequences.
 | \xNN | Hexadecimal byte |
 | \uNNNN | Unicode character |
 | \UNNNNNNNN | Unicode character |
-| \N{CAPITAL NAME} | Unicode character |
+| \N{UNICODE NAME} | Unicode character |
 
 ### Examples:
 
@@ -262,6 +262,10 @@ new -f tab.txt -w "Name\tValue"
 
 ```
 new -f emoji.txt -w "\u2764"
+```
+
+```
+new -f symbol.txt -w "\N{BLACK HEART SUIT}"
 ```
 
 ---
