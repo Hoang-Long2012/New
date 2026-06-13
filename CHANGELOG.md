@@ -1,27 +1,35 @@
 # Changelog
 
-## New version 1.3
-- Added -a; --access-time to update the access time of an existing file or folder or after it has been created.
-- Added -a; ----modified-time to update the modified time of an existing file or folder or after it has been created.
-- Added -c; --no-change-timestamp to not update access time and modified time after creating a new file or folder or when the file or folder already exists.
-- Improved help output.
-- Some internal improvements and bug fixes.
+## Version 1.4
 
----
+- Added -w; --write for writing inline or stdin content into files
+- Added -T; --template for copying content from template files
+- Added -r; --reference for copying timestamps from another file
+- Added -t; --time for setting both access and modified time
+- Improved timestamp handling and fallback logic
+- Improved file writing system and statistics tracking
+- Improved CLI validation rules
+- Better error handling for filesystem and input operations
+- Internal refactor of file and folder creation pipeline
 
-## New version 1.2
-- Some internal improvements and bug fixes.
+## Version 1.3
 
----
+- Added -a; --access-time
+- Added -m; --modified-time
+- Added -c; --no-change-timestamp
+- Improved help output
+- Bug fixes and internal improvements
 
-## New version 1.1
-- Added -d; --directory, you can now also use -d; --directory to create a folder similar to new folder1 folder2.
+## Version 1.2
 
----
+- Internal improvements and bug fixes
 
-## New version 1.0
-- First release stable.
+## Version 1.1
 
----
+- Added -d; --directory option
 
-© Copyright (c) 2026 Hoang-Long2012
+## Version 1.0
+
+- First stable release
+
+Copyright (c) 2026 Hoang-Long2012

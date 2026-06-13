@@ -25,7 +25,7 @@ def shouldOverwrite(Overwrite, Sure, Path):
 		return False
 	if Sure:
 		return True
-	return question(f"Are you sure you want to overwrite {Path}")
+	return question(f"Are you sure you want to overwrite {Path}", Enter=False)
 def resolveReference(Ref, Fallback):
 	if Ref is None:
 		return Fallback
@@ -108,12 +108,14 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 					LineNumber = 0
 					Total_Characters = 0
 					if Template_List and isinstance(Template_List, list):
+						log("Reading template...", InfoLevel.verbose)
 						Count, Lines = safeInput(Template_List)
 						LineNumber += Count or 0
 						if Lines is not None:
 							File.writelines(Lines)
 							Total_Characters += len("".join(Lines))
 					if Write is __stdin__:
+						log("Reading from standard input. Press Ctrl+Z then Enter on Windows or Control+D on Linux, MacOS to finish, Ctrl+C to cancel.", InfoLevel.normal)
 						Count, Lines = safeInput()
 						LineNumber += Count or 0
 						if Lines is not None:

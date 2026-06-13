@@ -2,6 +2,8 @@
 
 A simple command-line utility for creating folders and files.
 
+---
+
 ## Features
 
 - Create one or more folders
@@ -10,17 +12,21 @@ A simple command-line utility for creating folders and files.
 - Optional overwrite support
 - Confirmation prompt before overwriting
 - Text and binary file creation
+- Copy file timestamps from reference files
+- Custom access/modified time support
+- Read from template files or stdin
+- Write inline content to files
 - Verbose and quiet output modes
+
+---
 
 ## Installation
 
 ### From GitHub release
-
-If you are using Windows you can download New_Windows_x64.zip in the releases section below by  
-[clicking here](https://github.com/Hoang-Long2012/new/releases/latest) then unzip and enjoy.
+Download the release archive, extract, and run from:
+[Latest release page](https://github.com/Hoang-Long2012/new/releases/latest)
 
 ### From source
-
 ```
 git clone https://github.com/Hoang-Long2012/new.git
 cd new/src
@@ -28,163 +34,158 @@ python new.py
 ```
 
 ### Build executable
-
 ```
 pyinstaller --onefile new.py
 ```
 
+---
+
 ## Usage
 
 ### Create folders
-
 ```
 new Project Docs Assets
 ```
 
-Or:
-
+or
 ```
 new -d Project Docs Assets
 ```
 
-Result:
-
-```
-Project/
-Docs/
-Assets/
-```
-
 ### Create files
-
 ```
 new -f README.md LICENSE src/main.py
 ```
 
-Result:
-
-```
-README.md
-LICENSE
-src/
-└── main.py
-```
-
 ### Create folders and files together
-
 ```
 new src tests docs -f README.md LICENSE src/main.py tests/test_main.py
 ```
 
-Result:
-
-```
-src/
-tests/
-docs/
-README.md
-LICENSE
-src/main.py
-tests/test_main.py
-```
-
 ### Create binary files
-
 ```
 new -f image.bin data.bin -b
 ```
 
-### Create files with a specific encoding
-
+### Set encoding
 ```
 new -f notes.txt -e utf-8
 ```
 
-### Overwrite existing files or folders
-
+### Overwrite existing files/folders
 ```
 new Project -f README.md -o
 ```
 
 ### Overwrite without confirmation
-
 ```
 new Project -f README.md -o -y
 ```
 
-### Create a new file and update access time and modified time of it
+### Write content to file
 
+Inline text
 ```
-new -f main.py -a 1234.5678 -m 1234.5678
-```
-
-### Create a new folder and update access time and modified time of it
-
-```
-new src -a 1234.5678 -m 1234.5678
+new -f hello.txt -w "Hello world"
 ```
 
-### Verbose mode
+From stdin
+```
+new -f input.txt -w
+```
 
+### Use template files
+```
+new -f main.py -T template1.txt template2.txt
+```
+
+### Timestamp control
+
+Copy timestamp from reference
+```
+new -f file.txt -r reference.txt
+```
+
+Set access and modified time
+```
+new -f file.txt -a 1234.56 -m 1234.56
+```
+
+Disable timestamp update on existing files
+```
+new -f file.txt -c
+```
+
+### Output mode
+Verbose mode
 ```
 new Project -v
 ```
 
-### Quiet mode
-
+Quiet mode
 ```
 new Project -q
 ```
 
+---
+
 ## Options
 
-| Option              | Description                             |
-| ------------------- | --------------------------------------- |
-| `-d`, `--directory`      | Folders to create                         |
-| `-f`, `--file`      | Files to create                         |
-| `-b`, `--byte`      | Create files in binary mode             |
-| `-e`, `--encoding`  | Encoding for text files                 |
-| `-o`, `--overwrite` | Overwrite existing files or directories |
-| `-y`, `--yes`       | Skip overwrite confirmation             |
-| `-a, `--access-time`     | Update the access time            |
-| `-m, `--modified-time`     | Update the modified time            |
-| `-c, `--no-change-timestamp`     | Not change timestamp if file existed            |
-| `-v`, `--verbose`   | Show detailed logs                      |
-| `-q`, `--quiet`     | Suppress non-critical output            |
-| `-V`, `--version`   | Show program version                    |
-| `-h`, `--help`   | Show help message                    |
+- -d, --directory: Create folders
+- -f, --file: Create files
+- -b, --byte: Binary mode
+- -e, --encoding: File encoding
+- -o, --overwrite: Overwrite existing
+- -y, --yes: Skip confirmation
+- -w, --write: Write content to file
+- -T, --template: Copy template content
+- -r, --reference: Copy timestamps from file
+- -a, --access-time: Set access time
+- -m, --modified-time: Set modified time
+- -t, --time: Set both timestamps
+- -c, --no-change-timestamp: Do not update timestamps on existing files
+- -v, --verbose: Detailed logs
+- -q, --quiet: Minimal output
+- -V, --version: Show version
+- -h, --help: Show help
+
+---
 
 ## Examples
 
-### Create a Python project skeleton:
-
+### Python project skeleton
 ```
 new src tests docs -f README.md LICENSE src/main.py tests/test_main.py
 ```
 
-### Create a web project skeleton:
-
+### Web project skeleton
 ```
 new css js images -f index.html css/style.css js/app.js
 ```
 
-### Create nested directories automatically:
-
+### Auto-create nested directories
 ```
 new -f project/src/main.py
 ```
 
-### Note:
+---
 
-The `project` and `project/src` directories will be created automatically if they do not already exist.
+## Note
 
-## Changes
+- Missing parent directories are created automatically.
+- When writing inline, you can use unicode escapes like \n, \t, etc to write some special characters like line breaks, tabs, etc. If the escape is not valid, New will write the original string to the file.
+- Options -w; --write and -t; --template is currently only applicable to text files.
 
-You can read CHANGELOG.md to know changes at:
-[Here](https://github.com/Hoang-Long2012/new/blob/main/CHANGELOG.md)
+---
+
+## Changelog
+
+See changelog from:
+[CHANGELOG.md](https://github.com/Hoang-Long2012/new/blob/main/CHANGELOG.md)
+
+---
 
 ## License
 
-MIT License
-
-© Copyright (c) 2026 Hoang-Long2012
+MIT License  
+Copyright (c) 2026 Hoang-Long2012

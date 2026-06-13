@@ -14,16 +14,20 @@ def setLevel(Level):
 def log(MSG, Level, Stream=sys.stdout):
 	if Current_Level >= Level:
 		print(MSG, file=Stream)
-def question(MSG):
+def question(MSG, Enter):
 	while True:
 		try:
 			Select = input(f"{MSG} (Y / N)? ").strip().lower()
+		except KeyboardInterrupt:
+			return False
 		except EOFError:
 			return False
 		if Select in ["y", "yes"]:
 			return True
 		elif Select in ["n", "no"]:
 			return False
+		elif Select == "":
+			return Enter
 		else:
 			print("Invalid choice.", file=sys.stderr)
 			continue
