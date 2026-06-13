@@ -95,6 +95,11 @@ From stdin
 new -f input.txt -w
 ```
 
+From pipeline
+```
+echo Hello | new -f hello.txt -w
+```
+
 ### Use template files
 ```
 new -f main.py -T template1.txt template2.txt
@@ -102,7 +107,7 @@ new -f main.py -T template1.txt template2.txt
 
 ### Timestamp control
 
-Copy timestamp from reference
+Copy access time and modified time from THE reference FILE
 ```
 new -f file.txt -r reference.txt
 ```
@@ -154,6 +159,11 @@ new Project -q
 
 ## Examples
 
+### Create an empty Python file
+```
+new -f main.py
+```
+
 ### Python project skeleton
 ```
 new src tests docs -f README.md LICENSE src/main.py tests/test_main.py
@@ -169,14 +179,39 @@ new css js images -f index.html css/style.css js/app.js
 new -f project/src/main.py
 ```
 
+### Create a file with content
+```
+new -f hello.txt -w "Hello world"
+```
+
+### Create a file from stdin
+```
+new -f hello.txt -w
+```
+
+### Copy content from templates
+```
+new -f main.py -T header.txt body.txt
+```
+
 ---
 
 ## Note
 
 - Missing parent directories are created automatically.
+- Any encoding supported by Python may be used.  
+Examples:  
+- utf-8
+- utf-8-sig
+- utf-16
+- cp1252
+- cp1258
+- latin-1
 - Default encoding is utf-8.
 - When writing inline, you can use unicode escapes like \n, \t, etc to write some special characters like line breaks, tabs, etc. If the escape is not valid, New will write the original string to the file.
 - When the program is waiting for input from stdin you can Press Ctrl+Z then Enter on Windows or Control+D on Linux/MacOS to finish, Ctrl+C to cancel.
+- The content of all template files is copied directly into the created file.
+- Template files are processed in the order specified.
 - When a template file is `-`, it is interpreted as stdin.
 - To pass a literal file named `-`, use `./-` (Linux/macOS) or `.\-` (Windows).
 - Options -w; --write and -t; --template is currently only applicable to text files.
