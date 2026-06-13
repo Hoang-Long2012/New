@@ -53,14 +53,44 @@ or
 new -d Project Docs Assets
 ```
 
+Result:
+
+```
+Project/
+Docs/
+Assets/
+```
+
 ### Create files
 ```
 new -f README.md LICENSE src/main.py
 ```
 
+Result:
+
+```
+README.md
+LICENSE
+src/
+└── main.py
+```
+
 ### Create folders and files together
 ```
 new src tests docs -f README.md LICENSE src/main.py tests/test_main.py
+```
+
+Result:
+
+```
+.
+├── README.md
+├── LICENSE
+├── docs/
+├── src/
+│   └── main.py
+└── tests/
+    └── test_main.py
 ```
 
 ### Create binary files
@@ -179,6 +209,14 @@ new css js images -f index.html css/style.css js/app.js
 new -f project/src/main.py
 ```
 
+Result:
+
+```
+project/
+└── src/
+    └── main.py
+```
+
 ### Create a file with content
 ```
 new -f hello.txt -w "Hello world"
@@ -224,7 +262,8 @@ Examples:
 
 ## Escape Sequences
 
-When using `-w`, New attempts to decode common escape sequences.
+When using `-w`, New attempts to decode common escape sequences.  
+• Escape sequences are decoded using Python's unicode_escape codec.
 
 | Escape | Meaning |
 |---------|---------|
