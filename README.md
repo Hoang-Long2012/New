@@ -35,7 +35,8 @@ python new.py
 
 ### Build executable
 ```
-pyinstaller --onefile new.py
+pip install pyinstaller
+pyinstaller --onefile --clean --optimize 2 new.py
 ```
 
 ---
