@@ -11,6 +11,8 @@
 - Improved CLI validation rules
 - Better error handling for filesystem and input operations
 - Internal refactor of file and folder creation pipeline
+- Improved cli behavior.
+- Added new timestamp formats.
 
 ## Version 1.3
 
