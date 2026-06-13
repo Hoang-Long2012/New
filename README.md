@@ -209,6 +209,8 @@ Examples:
 - latin-1
 - Default encoding is utf-8.
 - When writing inline, you can use unicode escapes like \n, \t, etc to write some special characters like line breaks, tabs, etc. If the escape is not valid, New will write the original string to the file.
+- You can read some popular escapes from
+[Escape Sequences](#escape-sequences)
 - When the program is waiting for input from stdin you can Press Ctrl+Z then Enter on Windows or Control+D on Linux/MacOS to finish, Ctrl+C to cancel.
 - The content of all template files is copied directly into the created file.
 - Template files are processed in the order specified.
@@ -217,6 +219,47 @@ Examples:
 - Options -w; --write and -t; --template is currently only applicable to text files.
 - The source code is cross-platform and should work on Windows, Linux and macOS.
 - Currently only Windows binaries are officially provided.
+
+---
+
+## Escape Sequences
+
+When using `-w`, New attempts to decode common escape sequences.
+
+| Escape | Meaning |
+|---------|---------|
+| \n | New line |
+| \r | Carriage return |
+| \t | Horizontal tab |
+| \b | Backspace |
+| \f | Form feed |
+| \\ | Backslash |
+| \' | Single quote |
+| \" | Double quote |
+| \xNN | Hexadecimal byte |
+| \uNNNN | Unicode character |
+| \UNNNNNNNN | Unicode character |
+
+### Examples:
+
+```
+new -f hello.txt -w "Hello\nWorld"
+```
+
+Produces:
+
+```
+Hello
+World
+```
+
+```
+new -f tab.txt -w "Name\tValue"
+```
+
+```
+new -f emoji.txt -w "\u2764"
+```
 
 ---
 
