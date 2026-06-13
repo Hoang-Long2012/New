@@ -231,14 +231,17 @@ When using `-w`, New attempts to decode common escape sequences.
 | \n | New line |
 | \r | Carriage return |
 | \t | Horizontal tab |
+| \v | Vertical tab |
 | \b | Backspace |
 | \f | Form feed |
+| \a | Bell |
 | \\ | Backslash |
 | \' | Single quote |
 | \" | Double quote |
 | \xNN | Hexadecimal byte |
 | \uNNNN | Unicode character |
 | \UNNNNNNNN | Unicode character |
+| \N{CAPITAL NAME} | Unicode character |
 
 ### Examples:
 
