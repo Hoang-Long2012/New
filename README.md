@@ -235,9 +235,9 @@ When using `-w`, New attempts to decode common escape sequences.
 | \b | Backspace |
 | \f | Form feed |
 | \a | Bell |
-| \\ | Backslash |
-| \' | Single quote |
-| \" | Double quote |
+| \\\ | Backslash |
+| \\' | Single quote |
+| \\" | Double quote |
 | \xNN | Hexadecimal byte |
 | \uNNNN | Unicode character |
 | \UNNNNNNNN | Unicode character |
