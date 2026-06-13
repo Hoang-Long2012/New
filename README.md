@@ -174,6 +174,7 @@ new -f project/src/main.py
 ## Note
 
 - Missing parent directories are created automatically.
+- Default encoding is utf-8.
 - When writing inline, you can use unicode escapes like \n, \t, etc to write some special characters like line breaks, tabs, etc. If the escape is not valid, New will write the original string to the file.
 - When the program is waiting for input from stdin you can Press Ctrl+Z then Enter on Windows or Control+D on Linux/MacOS to finish, Ctrl+C to cancel.
 - When a template file is `-`, it is interpreted as stdin.
