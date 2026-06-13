@@ -175,8 +175,9 @@ new -f project/src/main.py
 
 - Missing parent directories are created automatically.
 - When writing inline, you can use unicode escapes like \n, \t, etc to write some special characters like line breaks, tabs, etc. If the escape is not valid, New will write the original string to the file.
-- When the program is waiting for input from stdin you can Press Ctrl+Z then Enter on Windows or Control+D on Linux, MacOS to finish, Ctrl+C to cancel.
-- When transmitting - to -T; --template will make New stop and wait for stdin, if you want to pass a file named exactly - to New please specify using ./- on Linux or MacOS, .\- on Windows.
+- When the program is waiting for input from stdin you can Press Ctrl+Z then Enter on Windows or Control+D on Linux/MacOS to finish, Ctrl+C to cancel.
+- When a template file is `-`, it is interpreted as stdin.
+- To pass a literal file named `-`, use `./-` (Linux/macOS) or `.\-` (Windows).
 - Options -w; --write and -t; --template is currently only applicable to text files.
 - The source code is cross-platform and should work on Windows, Linux and macOS.
 - Currently only Windows binaries are officially provided.
