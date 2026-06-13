@@ -209,7 +209,7 @@ Examples:
 - latin-1
 - Default encoding is utf-8.
 - When writing inline, you can use unicode escapes like \n, \t, etc to write some special characters like line breaks, tabs, etc. If the escape is not valid, New will write the original string to the file.
-- You can read some popular escapes from
+- You can read some popular escapes from  
 [Escape Sequences](#escape-sequences)
 - When the program is waiting for input from stdin you can Press Ctrl+Z then Enter on Windows or Control+D on Linux/MacOS to finish, Ctrl+C to cancel.
 - The content of all template files is copied directly into the created file.
