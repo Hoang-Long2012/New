@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 1.4
+## New version 1.4
 
 - Added -w; --write for writing inline or stdin content into files
 - Added -T; --template for copying content from template files
@@ -14,7 +14,9 @@
 - Improved cli behavior.
 - Added new timestamp formats.
 
-## Version 1.3
+----
+
+## New version 1.3
 
 - Added -a; --access-time
 - Added -m; --modified-time
@@ -22,16 +24,24 @@
 - Improved help output
 - Bug fixes and internal improvements
 
-## Version 1.2
+----
+
+## New version 1.2
 
 - Internal improvements and bug fixes
 
-## Version 1.1
+----
+
+## New version 1.1
 
 - Added -d; --directory option
 
-## Version 1.0
+----
+
+## New version 1.0
 
 - First stable release
+
+----
 
 Copyright (c) 2026 Hoang-Long2012
