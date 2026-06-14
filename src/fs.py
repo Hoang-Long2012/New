@@ -3,9 +3,9 @@ import os
 import shutil
 import stime
 import sys
-def safeInput(File_List=None):
+def safeInput(File_List=None, Encoding="utf-8"):
 	try:
-		return getInput(File_List)
+		return getInput(File_List, Encoding)
 	except FileNotFoundError as Error:
 		log(f"Template not found:\n{Error}", InfoLevel.quiet, sys.stderr)
 		return (None, None)
@@ -109,7 +109,7 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 					Total_Characters = 0
 					if Template_List and isinstance(Template_List, list):
 						log("Reading template...", InfoLevel.verbose)
-						Count, Lines = safeInput(Template_List)
+						Count, Lines = safeInput(Template_List, Encoding)
 						LineNumber += Count or 0
 						if Lines is not None:
 							File.writelines(Lines)
@@ -127,6 +127,7 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 							Decoded = Write.encode().decode("unicode_escape")
 							File.write(Decoded)
 						except (ValueError, UnicodeError, UnicodeDecodeError):
+							log(f"Warning: Invalid escape sequence, writing raw text: {Decoded}", InfoLevel.normal, sys.stderr)
 							File.write(Write)
 						Written_Lines = Decoded.count("\n") + (1 if Decoded else 0)
 						LineNumber += Written_Lines

@@ -281,6 +281,7 @@ When using `-w`, New attempts to decode common escape sequences.
 | \uNNNN | Unicode character |
 | \UNNNNNNNN | Unicode character |
 | \N{UNICODE NAME} | Unicode character |
+| \\{OCTAL} | Unicode character |
 
 ### Examples:
 

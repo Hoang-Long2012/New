@@ -31,11 +31,11 @@ def question(MSG, Enter):
 		else:
 			print("Invalid choice.", file=sys.stderr)
 			continue
-def getInput(File_List=None):
+def getInput(File_List=None, Encoding="utf-8"):
 	Lines = []
 	LineNumber = 0
 	if File_List and isinstance(File_List, (str, list)):
-		for LineNumber, Line in enumerate(fileinput.input(File_List, encoding="utf-8"), start=1):
+		for LineNumber, Line in enumerate(fileinput.input(File_List, encoding=Encoding if Encoding else "utf-8"), start=1):
 			Lines.append(Line)
 		return (LineNumber, Lines)
 	else:
