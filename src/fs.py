@@ -3,6 +3,45 @@ import os
 import shutil
 import stime
 import sys
+def readBinaryTemplate(Template_List):
+	Chunks = []
+	if not isinstance(Template_List, list):
+		log(f"{Template_List} is invalid.", InfoLevel.quiet, sys.stderr)
+		return None
+	for Template in Template_List:
+		if not isinstance(Template, str):
+			log(f"{Template} is invalid.", InfoLevel.quiet, sys.stderr)
+			continue
+		if Template == "-":
+			log("Reading from standard input. Press Ctrl+Z then Enter on Windows or Control+D on Linux, MacOS to finish, Ctrl+C to cancel.", InfoLevel.normal)
+			_, Lines = safeInput()
+			if Lines is not None:
+				try:
+					Hex = bytes.fromhex(Lines)
+				except ValueError:
+					Lines = "\n".join(Lines)
+					log(f"Error: Invalid hex string: {Lines}", InfoLevel.quiet, sys.stderr)
+					continue`
+		Template = os.path.abspath(Template)
+		if not os.path.exists(Template):
+			log(f"Template not found: {Template}", InfoLevel.quiet, sys.stderr)
+			continue
+		if not os.path.isfile(Template):
+			log(f"{Template} is not a file.", InfoLevel.quiet, sys.stderr)
+			continue
+		try:
+			with open(Template, "rb") as File:
+				Chunks.append(File.read())
+				continue
+		except PermissionError as Error:
+			log(f"Cannot access to template:\n{Error}", InfoLevel.quiet, sys.stderr)
+			continue
+		except OSError as Error:
+			log(f"Cannot read template:\n{Error}", InfoLevel.quiet, sys.stderr)
+			continue
+	if not Chunks:
+		log("No valid binary templates found", InfoLevel.normal)
+	return b"".join(Chunks)
 def safeInput(File_List=None, Encoding="utf-8"):
 	try:
 		return getInput(File_List, Encoding)
@@ -101,8 +140,37 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 			if Parent:
 				os.makedirs(Parent, exist_ok=True)
 			if Byte:
-				with open(File_Path, Mode, buffering=0):
-					pass
+				with open(File_Path, Mode, buffering=0) as File:
+					Bytes = 0
+					Hex = None
+					if Template_List and isinstance(Template_List, list):
+						Chunks = readBinaryTemplate(Template_List)
+						if Chunks:
+							File.write(Chunks)
+							Bytes += len(Chunks)
+					if Write is __stdin__:
+						log("Reading from standard input. Press Ctrl+Z then Enter on Windows or Control+D on Linux, MacOS to finish, Ctrl+C to cancel.", InfoLevel.normal)
+						_, Lines = safeInput()
+						if Lines is not None:
+							Hex = "".join(Lines)
+						if Hex is not None:
+							try:
+								Data = bytes.fromhex(Hex)
+							except ValueError:
+								log(f"Error: Invalid hex string: {Hex}", InfoLevel.quiet, sys.stderr)
+								continue
+							File.write(Data)
+							Bytes += len(Data)
+					elif Write is not None:
+						try:
+							Data = bytes.fromhex(Write)
+						except ValueError:
+							log(f"Error: Invalid hex string: {Write}", InfoLevel.quiet, sys.stderr)
+							continue
+						File.write(Data)
+						Bytes += len(Data)
+					Unit = "Byte" if Bytes == 1 else "Bytes"
+					log(f"Wrote {Bytes} {Unit} to {File_Path}", InfoLevel.verbose)
 			else:
 				with open(File_Path, Mode, encoding=Encoding if Encoding else "utf-8") as File:
 					LineNumber = 0

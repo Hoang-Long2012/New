@@ -3,7 +3,7 @@ import fs
 import sys
 import argparse
 def getVersion():
-	return "1.4"
+	return "1.5"
 def parseArgs():
 	Parser = argparse.ArgumentParser(prog="New", description="Simple folder and file creation utility.", epilog="Read readme full at https://github.com/Hoang-Long2012/new", allow_abbrev=False)
 	General = Parser.add_argument_group("General options")
@@ -25,8 +25,8 @@ def parseArgs():
 	Timestamp.add_argument("-r", "--reference", type=str, metavar="[REFERENCE FILE...]", help="Copy timestamps from reference file. May be combined with either -a or -m, but not both")
 	Timestamp.add_argument("-c", "--no-change-timestamp", action="store_false", default=True, help="Not change timestamp if file existed.")
 	WriteOptions = Parser.add_argument_group("Write options")
-	WriteOptions.add_argument("-w", "--write", nargs="?", type=str, const=__stdin__, default=None, metavar="[TEXT TO WRITE...]", help="Write content to file created, currently only testing with text files.")
-	WriteOptions.add_argument("-T", "--template", nargs="+", type=str, default=None, metavar="[TEMPLATE FILES...]", help="Copy  files content specified to file created, currently only testing with text files.")
+	WriteOptions.add_argument("-w", "--write", nargs="?", type=str, const=__stdin__, default=None, metavar="[TEXT TO WRITE...]", help="Write content to file created.")
+	WriteOptions.add_argument("-T", "--template", nargs="+", type=str, default=None, metavar="[TEMPLATE FILES...]", help="Copy  files content specified to file created.")
 	Output = Parser.add_argument_group("Output options")
 	Output = Output.add_mutually_exclusive_group()
 	Output.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output (show detailed logs).")
