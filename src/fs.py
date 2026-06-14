@@ -21,7 +21,7 @@ def readBinaryTemplate(Template_List):
 				except ValueError:
 					Lines = "\n".join(Lines)
 					log(f"Error: Invalid hex string: {Lines}", InfoLevel.quiet, sys.stderr)
-					continue`
+					continue
 		Template = os.path.abspath(Template)
 		if not os.path.exists(Template):
 			log(f"Template not found: {Template}", InfoLevel.quiet, sys.stderr)
