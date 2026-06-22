@@ -1,80 +1,8 @@
-from output import InfoLevel, log, question, getInput, __stdin__
+from output import InfoLevel, log, __stdin__
 import os
 import shutil
 import stime
-import sys
-def readBinaryTemplate(Template_List):
-	Chunks = []
-	if not isinstance(Template_List, list):
-		log(f"{Template_List} is invalid.", InfoLevel.quiet, sys.stderr)
-		return None
-	for Template in Template_List:
-		if not isinstance(Template, str):
-			log(f"{Template} is invalid.", InfoLevel.quiet, sys.stderr)
-			continue
-		if Template == "-":
-			log("Reading from standard input. Press Ctrl+Z then Enter on Windows or Control+D on Linux, MacOS to finish, Ctrl+C to cancel.", InfoLevel.normal)
-			_, Lines = safeInput()
-			if Lines is not None:
-				try:
-					Hex = bytes.fromhex(Lines)
-				except ValueError:
-					Lines = "\n".join(Lines)
-					log(f"Error: Invalid hex string: {Lines}", InfoLevel.quiet, sys.stderr)
-					continue
-		Template = os.path.abspath(Template)
-		if not os.path.exists(Template):
-			log(f"Template not found: {Template}", InfoLevel.quiet, sys.stderr)
-			continue
-		if not os.path.isfile(Template):
-			log(f"{Template} is not a file.", InfoLevel.quiet, sys.stderr)
-			continue
-		try:
-			with open(Template, "rb") as File:
-				Chunks.append(File.read())
-				continue
-		except PermissionError as Error:
-			log(f"Cannot access to template:\n{Error}", InfoLevel.quiet, sys.stderr)
-			continue
-		except OSError as Error:
-			log(f"Cannot read template:\n{Error}", InfoLevel.quiet, sys.stderr)
-			continue
-	if not Chunks:
-		log("No valid binary templates found", InfoLevel.normal)
-	return b"".join(Chunks)
-def safeInput(File_List=None, Encoding="utf-8"):
-	try:
-		return getInput(File_List, Encoding)
-	except FileNotFoundError as Error:
-		log(f"Template not found:\n{Error}", InfoLevel.quiet, sys.stderr)
-		return (None, None)
-	except PermissionError as Error:
-		log(f"Cannot access to template:\n{Error}", InfoLevel.quiet, sys.stderr)
-		return (None, None)
-	except OSError as Error:
-		log(f"Cannot read template:\n{Error}", InfoLevel.quiet, sys.stderr)
-		return (None, None)
-	except KeyboardInterrupt:
-		log("Canceled.", InfoLevel.verbose)
-		return (None, None)
-def shouldOverwrite(Overwrite, Sure, Path):
-	if not Overwrite:
-		Type = "Directory" if os.path.isdir(Path) else "File"
-		log(f"{Type} already exists: {Path}", InfoLevel.normal)
-		return False
-	if Sure:
-		return True
-	return question(f"Are you sure you want to overwrite {Path}", Enter=False)
-def resolveReference(Ref, Fallback):
-	if Ref is None:
-		return Fallback
-	if isinstance(Ref, str) and os.path.exists(Ref):
-		return Ref
-	log(f"Warning: Reference {Ref} invalid, using {Fallback}", InfoLevel.normal, sys.stderr)
-	return Fallback
-def getTime(Ref, AccessTime, ModifiedTime):
-	Stat = os.stat(Ref)
-	return (AccessTime if AccessTime is not None else Stat.st_atime, ModifiedTime if ModifiedTime is not None else Stat.st_mtime)
+import utils
 def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, AccessTime=None, ModifiedTime=None, Reference=None):
 	if not isinstance(Dirs, list):
 		log(f"{str(Dirs)} is invalid.", InfoLevel.quiet, sys.stderr)
@@ -84,14 +12,14 @@ def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, Access
 			log(f"{Dir} is invalid.", InfoLevel.quiet, sys.stderr)
 			continue
 		Dir = os.path.abspath(Dir)
-		Ref = resolveReference(Reference, Dir)
+		Ref = utils.resolveReference(Reference, Dir)
 		if os.path.exists(Dir):
 			if not os.path.isdir(Dir):
 				log(f"{Dir} is not a directory.", InfoLevel.quiet, sys.stderr)
 				continue
-			if not shouldOverwrite(Overwrite, Sure, Dir):
+			if not utils.shouldOverwrite(Overwrite, Sure, Dir):
 				if ChangeTimestamp:
-					stime.updateTime(Dir, *getTime(Ref, AccessTime, ModifiedTime))
+					stime.updateTime(Dir, *utils.getTime(Ref, AccessTime, ModifiedTime))
 				continue
 			try:
 				shutil.rmtree(Dir)
@@ -106,7 +34,7 @@ def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, Access
 			os.makedirs(Dir, exist_ok=True)
 			log(f"Created {Dir}", InfoLevel.verbose)
 			if ChangeTimestamp and os.path.exists(Ref):
-				stime.updateTime(Dir, *getTime(Ref, AccessTime, ModifiedTime))
+				stime.updateTime(Dir, *utils.getTime(Ref, AccessTime, ModifiedTime))
 		except PermissionError:
 			log(f"Permission denied: {Dir}", InfoLevel.quiet, sys.stderr)
 			continue
@@ -122,15 +50,15 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 			log(f"{File_Path} is invalid.", InfoLevel.quiet, sys.stderr)
 			continue
 		File_Path = os.path.abspath(File_Path)
-		Ref = resolveReference(Reference, File_Path)
+		Ref = utils.resolveReference(Reference, File_Path)
 		Exists = os.path.exists(File_Path)
 		if Exists:
 			if not os.path.isfile(File_Path):
 				log(f"{File_Path} is a directory.", InfoLevel.quiet, sys.stderr)
 				continue
-			if not shouldOverwrite(Overwrite, Sure, File_Path):
+			if not utils.shouldOverwrite(Overwrite, Sure, File_Path):
 				if ChangeTimestamp:
-					stime.updateTime(File_Path, *getTime(Ref, AccessTime, ModifiedTime))
+					stime.updateTime(File_Path, *utils.getTime(Ref, AccessTime, ModifiedTime))
 				continue
 			Mode = "wb" if Byte else "w"
 		else:
@@ -144,13 +72,13 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 					Bytes = 0
 					Hex = None
 					if Template_List and isinstance(Template_List, list):
-						Chunks = readBinaryTemplate(Template_List)
+						Chunks = utils.readBinaryTemplate(Template_List)
 						if Chunks:
 							File.write(Chunks)
 							Bytes += len(Chunks)
 					if Write is __stdin__:
 						log("Reading from standard input. Press Ctrl+Z then Enter on Windows or Control+D on Linux, MacOS to finish, Ctrl+C to cancel.", InfoLevel.normal)
-						_, Lines = safeInput()
+						_, Lines = utils.safeInput()
 						if Lines is not None:
 							Hex = "".join(Lines)
 						if Hex is not None:
@@ -177,14 +105,14 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 					Total_Characters = 0
 					if Template_List and isinstance(Template_List, list):
 						log("Reading template...", InfoLevel.verbose)
-						Count, Lines = safeInput(Template_List, Encoding)
+						Count, Lines = utils.safeInput(Template_List, Encoding)
 						LineNumber += Count or 0
 						if Lines is not None:
 							File.writelines(Lines)
 							Total_Characters += len("".join(Lines))
 					if Write is __stdin__:
 						log("Reading from standard input. Press Ctrl+Z then Enter on Windows or Control+D on Linux, MacOS to finish, Ctrl+C to cancel.", InfoLevel.normal)
-						Count, Lines = safeInput()
+						Count, Lines = utils.safeInput()
 						LineNumber += Count or 0
 						if Lines is not None:
 							File.writelines(Lines)
@@ -206,7 +134,7 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 			else:
 				log(f"Created {File_Path}", InfoLevel.verbose)
 			if ChangeTimestamp and os.path.exists(Ref):
-				stime.updateTime(File_Path, *getTime(Ref, AccessTime, ModifiedTime))
+				stime.updateTime(File_Path, *utils.getTime(Ref, AccessTime, ModifiedTime))
 		except PermissionError:
 			log(f"Permission denied: {File_Path}", InfoLevel.quiet, sys.stderr)
 			continue
