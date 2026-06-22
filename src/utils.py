@@ -1,6 +1,19 @@
-from output import question, log, InfoLevel
+from output import question, log, InfoLevel, getInput
 import sys
 import os
+import glob
+def pattern(Patterns):
+	if not isinstance(Patterns, list):
+		log(f"{Patterns} must be list.")
+		return None
+	Result = []
+	for Pattern in Patterns:
+		if not isinstance(Pattern, str):
+			log(f"{Pattern} must be string.")
+			continue
+		File = glob.glob(Pattern)
+		Result.extend(File)
+	return Result
 def readBinaryTemplate(Template_List):
 	Chunks = []
 	if not isinstance(Template_List, list):

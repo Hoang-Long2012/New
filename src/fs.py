@@ -72,6 +72,8 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 					Bytes = 0
 					Hex = None
 					if Template_List and isinstance(Template_List, list):
+						log("Reading template...", InfoLevel.verbose)
+						Template_List = utils.pattern(Template_List)
 						Chunks = utils.readBinaryTemplate(Template_List)
 						if Chunks:
 							File.write(Chunks)
@@ -105,6 +107,7 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 					Total_Characters = 0
 					if Template_List and isinstance(Template_List, list):
 						log("Reading template...", InfoLevel.verbose)
+						Template_List = utils.pattern(Template_List)
 						Count, Lines = utils.safeInput(Template_List, Encoding)
 						LineNumber += Count or 0
 						if Lines is not None:
