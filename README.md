@@ -4,6 +4,12 @@ A simple command-line utility for creating folders and files.
 
 ---
 
+## Introduction
+
+Windows CMD does not provide a simple built-in command equivalent to touch. New is a small cross-platform utility that creates files and directories with support for templates, timestamps, and inline content.
+
+---
+
 ## Features
 
 - Create one or more folders
@@ -254,6 +260,7 @@ Examples:
 - Template files are processed in the order specified.
 - When a template file is `-`, it is interpreted as stdin.
 - To pass a literal file named `-`, use `./-` (Linux/macOS) or `.\-` (Windows).
+- You can use wildcard patterns when specifying template files.
 - The source code is cross-platform and should work on Windows, Linux and macOS.
 - Currently only Windows binaries are officially provided.
 
@@ -331,4 +338,14 @@ See changelog from:
 ## License
 
 MIT License  
+
+---
+
+## Contribution
+
+If you want to contribute to the project, don't hesitate to send your pr.  
+Or if you want to report a bug or request a feature, let create an issue.
+
+---
+
 Copyright (c) 2026 Hoang-Long2012
