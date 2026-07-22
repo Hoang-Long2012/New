@@ -343,8 +343,8 @@ MIT License
 
 ## Contribution
 
-If you want to contribute to the project, don't hesitate to send your pr.  
-Or if you want to report a bug or request a feature, let create an issue.
+If you'd like to contribute, feel free to submit a pull request.  
+If you'd like to report a bug or request a feature, please open an issue.
 
 ---
 
