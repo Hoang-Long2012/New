@@ -1,32 +1,32 @@
-from output import setLevel, InfoLevel, log, __stdin__
+from output import setLevel, InfoLevel, __stdin__
 import fs
 import sys
 import argparse
 def getVersion():
-	return "1.5"
+	return "1.6"
 def parseArgs():
 	Parser = argparse.ArgumentParser(prog="New", description="Simple folder and file creation utility.", epilog="Read readme full at https://github.com/Hoang-Long2012/new", allow_abbrev=False)
 	General = Parser.add_argument_group("General options")
 	Folder = General.add_mutually_exclusive_group()
-	Folder.add_argument("folder", nargs="*", type=str, metavar="[FOLDERS...]", help="Folders to create.")
-	Folder.add_argument("-d", "--directory", nargs="+", type=str, metavar="[FOLDERS...]", help="Folders to create.")
-	General.add_argument("-f", "--file", nargs="+", type=str, metavar="[FILES...]", help="Files to create.")
+	Folder.add_argument("folder", nargs="*", type=str, metavar="FOLDERS", help="Folders to create.")
+	Folder.add_argument("-d", "--directory", nargs="+", type=str, metavar="FOLDERS", help="Folders to create.")
+	General.add_argument("-f", "--file", nargs="+", type=str, metavar="FILES", help="Files to create.")
 	File_Format = Parser.add_argument_group("File format options")
 	File_Format = File_Format.add_mutually_exclusive_group()
 	File_Format.add_argument("-b", "--byte", action="store_true", help="Create files in binary mode.")
-	File_Format.add_argument("-e", "--encoding", type=str, metavar="[ENCODING...]", help="Encoding for created files.")
+	File_Format.add_argument("-e", "--encoding", type=str, metavar="ENCODING", help="Encoding for created files.")
 	Overwrite = Parser.add_argument_group("Overwrite options")
 	Overwrite.add_argument("-o", "--overwrite", action="store_true", help="If created file exists then overwrite it.")
 	Overwrite.add_argument("-y", "--yes", action="store_true", help="Overwrite without confirmation.")
 	Timestamp = Parser.add_argument_group("Update timestamp options")
-	Timestamp.add_argument("-a", "--access-time", metavar="[ACCESS TIME...]", help="Update access time.")
-	Timestamp.add_argument("-m", "--modified-time", metavar="[MODIFIED TIME...]", help="Update modified time")
-	Timestamp.add_argument("-t", "--time", metavar="[TIME...]", help="Update both access time and modified time")
-	Timestamp.add_argument("-r", "--reference", type=str, metavar="[REFERENCE FILE...]", help="Copy timestamps from reference file. May be combined with either -a or -m, but not both")
+	Timestamp.add_argument("-a", "--access-time", metavar="ACCESS TIME", help="Update access time.")
+	Timestamp.add_argument("-m", "--modified-time", metavar="MODIFIED TIME", help="Update modified time")
+	Timestamp.add_argument("-t", "--time", metavar="TIME", help="Update both access time and modified time")
+	Timestamp.add_argument("-r", "--reference", type=str, metavar="REFERENCE FILE", help="Copy timestamps from reference file. May be combined with either -a or -m, but not both")
 	Timestamp.add_argument("-c", "--no-change-timestamp", action="store_false", default=True, help="Not change timestamp if file existed.")
 	WriteOptions = Parser.add_argument_group("Write options")
-	WriteOptions.add_argument("-w", "--write", nargs="?", type=str, const=__stdin__, default=None, metavar="[TEXT TO WRITE...]", help="Write content to file created.")
-	WriteOptions.add_argument("-T", "--template", nargs="+", type=str, default=None, metavar="[TEMPLATE FILES...]", help="Copy  files content specified to file created.")
+	WriteOptions.add_argument("-w", "--write", nargs="?", type=str, const=__stdin__, default=None, metavar="TEXT TO WRITE", help="Write content to file created.")
+	WriteOptions.add_argument("-T", "--template", nargs="+", type=str, default=None, metavar="TEMPLATE FILES", help="Copy  files content specified to file created.")
 	Output = Parser.add_argument_group("Output options")
 	Output = Output.add_mutually_exclusive_group()
 	Output.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output (show detailed logs).")

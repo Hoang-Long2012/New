@@ -11,8 +11,11 @@ def pattern(Patterns):
 		if not isinstance(Pattern, str):
 			log(f"{Pattern} must be string.")
 			continue
-		File = glob.glob(Pattern)
-		Result.extend(File)
+		Files = glob.glob(Pattern)
+		if Files:
+			Result.extend(Files)
+		else:
+			Result.append(Pattern)
 	return Result
 def readBinaryTemplate(Template_List):
 	Chunks = []
@@ -28,7 +31,8 @@ def readBinaryTemplate(Template_List):
 			_, Lines = safeInput()
 			if Lines is not None:
 				try:
-					Hex = bytes.fromhex(Lines)
+					Hex = bytes.fromhex("".join(Lines))
+					Chunks.append(Hex)
 				except ValueError:
 					Lines = "\n".join(Lines)
 					log(f"Error: Invalid hex string: {Lines}", InfoLevel.quiet, sys.stderr)
