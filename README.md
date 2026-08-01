@@ -268,7 +268,7 @@ Examples:
 
 ## Escape Sequences
 
-When using `-w`, New attempts to decode common escape sequences.  
+When using `-w`, `--write` New attempts to decode common escape sequences.  
 • Escape sequences are decoded using Python's unicode_escape codec.
 
 | Escape | Meaning |
@@ -337,7 +337,7 @@ See changelog from:
 
 ## License
 
-MIT License  
+This project is licensed under the [MIT License](LICENSE).  
 
 ---
 
