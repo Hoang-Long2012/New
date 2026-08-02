@@ -124,9 +124,9 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 					elif Write is not None:
 						Decoded = Write
 						try:
-							Decoded = Write.encode().decode("unicode_escape")
+							Decoded = utils.decodeEscape(Write)
 							File.write(Decoded)
-						except (ValueError, UnicodeError, UnicodeDecodeError):
+						except RuntimeError:
 							log(f"Warning: Invalid escape sequence, writing raw text: {Decoded}", InfoLevel.normal, sys.stderr)
 							File.write(Write)
 						Written_Lines = Decoded.count("\n") + (1 if Decoded else 0)

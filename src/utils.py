@@ -2,6 +2,17 @@ from output import question, log, InfoLevel, getInput
 import sys
 import os
 import glob
+import ast
+def decodeEscape(Value):
+	if Value is None:
+		return None
+	try:
+		Result = ast.literal_eval('"' + Value.replace('"', '\\"') + '"')
+		if not isinstance(Result, str):
+			raise ValueError
+		return Result
+	except (SyntaxError, ValueError, UnicodeError):
+		raise RuntimeError(f"Invalid escape sequence: {Value!r}")
 def pattern(Patterns):
 	if not isinstance(Patterns, list):
 		log(f"{Patterns} must be list.")

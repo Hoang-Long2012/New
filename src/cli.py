@@ -3,7 +3,7 @@ import fs
 import sys
 import argparse
 def getVersion():
-	return "1.6"
+	return "1.7"
 def parseArgs():
 	Parser = argparse.ArgumentParser(prog="New", description="Simple folder and file creation utility.", epilog="Read readme full at https://github.com/Hoang-Long2012/new", allow_abbrev=False)
 	General = Parser.add_argument_group("General options")
