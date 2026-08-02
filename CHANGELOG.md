@@ -1,5 +1,10 @@
 # Changelog
 
+## New version 1.7
+- Internal changes.
+
+----
+
 ## New version 1.6
 - You can now use wildcards with -T; --template.
 - Some internal changes.
