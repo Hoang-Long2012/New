@@ -1,5 +1,12 @@
 # Changelog
 
+## new version 1.8
+- Internal changes.
+- Improved timestamp update logic.
+- Improved cli help.
+
+----
+
 ## New version 1.7
 - Internal changes.
 
