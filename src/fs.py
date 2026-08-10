@@ -14,7 +14,8 @@ def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, Access
 			continue
 		Dir = os.path.abspath(Dir)
 		Ref = utils.resolveReference(Reference, Dir)
-		if os.path.exists(Dir):
+		Exists = os.path.exists(Dir)
+		if Exists:
 			if not os.path.isdir(Dir):
 				log(f"{Dir} is not a directory.", InfoLevel.quiet, sys.stderr)
 				continue
@@ -34,7 +35,7 @@ def createFolder(Dirs, Overwrite=False, Sure=False, ChangeTimestamp=True, Access
 		try:
 			os.makedirs(Dir, exist_ok=True)
 			log(f"Created {Dir}", InfoLevel.verbose)
-			if ChangeTimestamp and os.path.exists(Ref):
+			if ChangeTimestamp and os.path.exists(Ref) and Exists:
 				stime.updateTime(Dir, *utils.getTime(Ref, AccessTime, ModifiedTime))
 		except PermissionError:
 			log(f"Permission denied: {Dir}", InfoLevel.quiet, sys.stderr)
@@ -137,7 +138,7 @@ def createFile(Files, Byte=False, Encoding="utf-8", Overwrite=False, Sure=False,
 				log(f"Overwritten {File_Path}", InfoLevel.verbose)
 			else:
 				log(f"Created {File_Path}", InfoLevel.verbose)
-			if ChangeTimestamp and os.path.exists(Ref):
+			if ChangeTimestamp and os.path.exists(Ref) and Exists:
 				stime.updateTime(File_Path, *utils.getTime(Ref, AccessTime, ModifiedTime))
 		except PermissionError:
 			log(f"Permission denied: {File_Path}", InfoLevel.quiet, sys.stderr)
