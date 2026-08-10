@@ -3,7 +3,8 @@
 ## New version 1.8
 - Internal changes.
 - Improved timestamp update logic.
-- Improved cli help.
+- Improved CLI help.
+- Improved error message.
 
 ----
 

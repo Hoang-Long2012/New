@@ -10,15 +10,15 @@ def validateArgs(Args, Parser):
 	if Args.yes and not Args.overwrite:
 		Parser.error("-y; --yes requires -o; --overwrite.")
 	if not (Args.folder or Args.directory or Args.file):
-		Parser.error("at least one of folder, -d/--directory or -f/--file is required")
+		Parser.error("at least one of folder, -d/--directory or -f/--file is required.")
 	if (Args.write is not None or Args.template) and not Args.file:
 		Parser.error("-w; --write or -T; --template requires -f; --file.")
 	if Args.time and (Args.access_time or Args.modified_time or Args.reference):
-		Parser.error("-t; --time cannot be used with [-a; --access-time], [-m; --modified-time] or [-r; --reference]")
+		Parser.error("-t; --time cannot be used with [-a; --access-time], [-m; --modified-time] or [-r; --reference].")
 	if not Args.no_change_timestamp and (Args.access_time or Args.modified_time or Args.reference or Args.time):
-		Parser.error("-c; --no-change-timestamp cannot be used with timestamp options")
+		Parser.error("-c; --no-change-timestamp cannot be used with timestamp options.")
 	if Args.reference and Args.access_time and Args.modified_time:
-		Parser.error("-r; --reference cannot be used at the same time with both [-a; --access-time] and [-m; --modified-time]")
+		Parser.error("-r; --reference cannot be used at the same time with both [-a; --access-time] and [-m; --modified-time].")
 def parseArgs():
 	Parser = argparse.ArgumentParser(prog="New", description="%(prog)s: Simple folder and file creation utility.", epilog="For more information, see the full README:\nhttps://github.com/Hoang-Long2012/new", formatter_class=argparse.RawTextHelpFormatter, allow_abbrev=False, add_help=False)
 	Parser.add_argument("folder", nargs="*", type=str, metavar="FOLDERS", help="Folders to create.")
