@@ -262,7 +262,7 @@ Examples:
 - To pass a literal file named `-`, use `./-` (Linux/macOS) or `.\-` (Windows).
 - You can use wildcard patterns when specifying template files.
 - The source code is cross-platform and should work on Windows, Linux and macOS.
-- Currently only Windows binaries are officially provided.
+- Currently only Windows and Linux binaries are officially provided.
 
 ---
 
