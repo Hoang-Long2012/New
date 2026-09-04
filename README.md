@@ -240,7 +240,7 @@ new -f main.py -T header.txt body.txt
 
 ---
 
-## Note
+## Notes
 
 - Missing parent directories are created automatically.
 - Any encoding supported by Python may be used.  
@@ -252,7 +252,7 @@ Examples:
 - cp1258
 - latin-1
 - Default encoding is utf-8.
-- By default, if you don't use `-c`, `--no-change-timestamp`, the file or directory timestamp will automatically be set to the now.
+- By default, timestamps are set to the current time. Use `-c`, `--no-change-timestamp` to preserve the timestamps of existing files and directories.
 - When writing inline, you can use unicode escapes like \n, \t, etc to write some special characters like line breaks, tabs, etc. If the escape is not valid, New will write the original string to the file.
 - You can read some popular escapes from  
 [Escape Sequences](#escape-sequences)
@@ -290,7 +290,7 @@ When using `-w`, `--write` New attempts to decode common escape sequences.
 | \N{UNICODE NAME} | Unicode character |
 | \\{OCTAL} | Unicode character |
 
-### Examples:
+### Examples
 
 ```
 new -f hello.txt -w "Hello\nWorld"
