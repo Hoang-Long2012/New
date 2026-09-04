@@ -20,7 +20,7 @@ def validateArgs(Args, Parser):
 	if Args.reference and Args.access_time and Args.modified_time:
 		Parser.error("-r; --reference cannot be used at the same time with both [-a; --access-time] and [-m; --modified-time].")
 def parseArgs():
-	Parser = argparse.ArgumentParser(prog="New", description="%(prog)s: Simple folder and file creation utility.", epilog="For more information, see the full README:\nhttps://github.com/Hoang-Long2012/new", formatter_class=argparse.RawTextHelpFormatter, allow_abbrev=False, add_help=False)
+	Parser = argparse.ArgumentParser(prog="New", description="%(prog)s: Simple folder and file creation utility.", usage="%(prog)s [OPTIONS] [FOLDERS ...]", epilog="For more information, see the full README:\nhttps://github.com/Hoang-Long2012/new", formatter_class=argparse.RawTextHelpFormatter, allow_abbrev=False, add_help=False)
 	Parser.add_argument("folder", nargs="*", type=str, metavar="FOLDERS", help="Folders to create.")
 	General = Parser.add_argument_group("General options")
 	General.add_argument("-h", "--help", action="help", help="Show this help message and exit.")
