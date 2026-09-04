@@ -252,6 +252,7 @@ Examples:
 - cp1258
 - latin-1
 - Default encoding is utf-8.
+- By default, if you don't use `-c`, `--no-change-timestamp`, the file or directory timestamp will automatically be set to the now.
 - When writing inline, you can use unicode escapes like \n, \t, etc to write some special characters like line breaks, tabs, etc. If the escape is not valid, New will write the original string to the file.
 - You can read some popular escapes from  
 [Escape Sequences](#escape-sequences)
