@@ -1,7 +1,7 @@
 # Changelog
 
 ## New version 1.9
-- Improved CLI help.
+- Improved CLI help and error message.
 
 ----
 
