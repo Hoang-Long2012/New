@@ -1,5 +1,10 @@
 # Changelog
 
+## New version 1.9
+- Improved CLI help.
+
+----
+
 ## New version 1.8
 - Internal changes.
 - Improved timestamp update logic.
@@ -21,9 +26,9 @@
 
 ## New version 1.5
 
-- applied -w; --write and -T; --Template for -b; --bytes, you can now use -w; --write and -t; --template with -b; --bytes.
+- applied -w; --write and -T; --Template for -b; --bytes, you can now use -w; --write and -T; --template with -b; --bytes.
 - Now if the invalid unicode escape character New will display a warning instead of silent as before.
-- Now encoding of the files you pass to -t; --Template can be specified with -e; --encoding.
+- Now encoding of the files you pass to -T; --Template can be specified with -e; --encoding.
 
 ----
 
