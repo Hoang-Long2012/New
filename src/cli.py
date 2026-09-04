@@ -3,7 +3,7 @@ import fs
 import sys
 import argparse
 def getVersion():
-	return "1.8"
+	return "1.9"
 def validateArgs(Args, Parser):
 	if Args.folder and Args.directory:
 		Parser.error("-d; --directory cannot be used with folder positional argument.")
